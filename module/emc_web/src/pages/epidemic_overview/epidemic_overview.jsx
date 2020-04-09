@@ -1,6 +1,7 @@
 import React from "react";
 import './epidemic_overview.less';
 
+import { Provider } from 'react-redux';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from "react-apollo";
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -14,10 +15,14 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 
 import CoronaMap from "./components/corona_map/corona_map";
+import configureStore from '../../store';
+import {fetchData} from '../../actions/actions';
 
 const client = new ApolloClient({
     uri: 'https://covid19-graphql.now.sh/'
 });
+
+const store = configureStore();
 
 class EpidemicOverview extends React.Component {
 
@@ -31,21 +36,20 @@ class EpidemicOverview extends React.Component {
     }
 
     componentDidMount() {
-        console.log('EpidemicOverview componentDidMount...')
-        
+        store.dispatch(fetchData('/countries'));
     }
 
     handleChange = (event, value) => {
         this.setState({ selectedCategory: value });
     }
 
-    handleDateChange = (event, value)  => {
+    handleDateChange = (event, value) => {
         this.setState({ selectedDate: value });
     };
 
     render() {
         return (
-            <div>
+            <Provider store={store}>
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -89,7 +93,7 @@ class EpidemicOverview extends React.Component {
                         <CoronaMap selectedCategory={this.state.selectedCategory} selectedDate={this.state.selectedDate} />
                     </div>
                 </ApolloProvider>
-            </div>
+            </Provider>
         );
     }
 }

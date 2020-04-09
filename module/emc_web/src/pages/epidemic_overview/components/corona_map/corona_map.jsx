@@ -1,6 +1,5 @@
 import React from "react";
 import ReactEcharts from 'echarts-for-react';
-import { apiGetCountries } from "../../../service";
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -14,6 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import { connect } from "react-redux";
 
 require('echarts/map/js/china.js');
 require('echarts/map/js/world.js');
@@ -23,7 +23,6 @@ class CoronaMap extends React.Component {
         super(props);
 
         this.state = {
-            latlong: {},
             data: [],
             getCountryQuery: gql`
             {
@@ -47,30 +46,15 @@ class CoronaMap extends React.Component {
     hasOwnProperty = Object.prototype.hasOwnProperty;
 
     componentDidMount() {
-        console.log('呼叫apiGetCountries...');
-        apiGetCountries()
-            .then(res => {
-                let temp = {};
-                res.data.forEach(item => {
-                    temp[item.keyword] = item;
-                });
-                this.setState({ latlong: temp });
-            })
-            .catch(err => {
-                console.log(err)
-            });
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         //執行內容
-        console.log('時間一分一秒在跑...')
     }
 
-    componentWillUnmount(){
-        //這裡記錄移除掉的時間
-        console.log(`移除組件..`)
+    componentWillUnmount() {
+        //移除組件
     }
-    
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.selectedDate !== this.props.selectedDate) {
@@ -127,7 +111,7 @@ class CoronaMap extends React.Component {
     getWorldOption = (data) => {
         let max = -Infinity;
         let min = Infinity;
-        const latlong = this.state.latlong;
+        const latlong = this.props.latlong;
         data.forEach((itemOpt, index) => {
             if (itemOpt[this.props.selectedCategory] > max) {
                 max = itemOpt[this.props.selectedCategory];
@@ -228,17 +212,14 @@ class CoronaMap extends React.Component {
                         });
                         let result = ranking.slice(0, 20);
                         let rank = 1;
-                        
+
                         for (let i = 0; i < result.length; i++) {
                             // increase rank only if current score less than previous
-                            if (i > 0 && result[i][this.props.selectedCategory] < result[i - 1][this.props.selectedCategory]) {
+                            if (i > 0 && result[i][this.props.selectedCategory] <= result[i - 1][this.props.selectedCategory]) {
                                 rank++;
                             }
                             result[i].rank = rank;
-                            // console.log(result[i].country.name);
-                            // console.log(this.state.latlong);
-                           // result[i].name_cn = this.state.latlong[result[i].country.name].name_cn;
-                           result[i].name_cn =result[i].country.name;
+                            result[i].name_cn = result[i].country.name;
                         }
                         return (
                             <div>
@@ -332,4 +313,14 @@ class CoronaMap extends React.Component {
     };
 }
 
-export default CoronaMap;
+const mapStateToProps = (state) => {
+    let temp = {};
+    state.countries.data.forEach(item => {
+        temp[item.keyword] = item;
+    });
+    return {
+        latlong: temp
+    }
+};
+
+export default connect(mapStateToProps)(CoronaMap);

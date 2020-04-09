@@ -6,17 +6,11 @@ import './corona_status.less';
 
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import { apiGetCountries } from "../../service";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { connect } from "react-redux";
 
 class CoronaStatus extends React.Component {
 
@@ -25,7 +19,6 @@ class CoronaStatus extends React.Component {
 
         this.state = {
             country: '台灣',
-            countries: [],
             progress: 0,
             newCasesToday: 0,
             getCountryQuery: gql`
@@ -46,23 +39,17 @@ class CoronaStatus extends React.Component {
     }
 
     componentDidMount() {
-        console.log('呼叫apiGetCountries...');
-        apiGetCountries()
-            .then(res => {
-                console.log(res);
-                this.setState({ countries: res.data })
-
-
-            })
-            .catch(err => {
-                console.log(err)
-            });
     }
 
+    componentDidUpdate() {
+        //執行內容
+    }
 
+    componentWillUnmount() {
+        //移除組件
+    }
 
     handleChange = (event, value) => {
-        console.log(value);
         if (value !== null) {
             let getCountryQuery = gql`
         {
@@ -209,7 +196,7 @@ class CoronaStatus extends React.Component {
                 <FormControl style={{ minWidth: 120 }}>
                     <Autocomplete
                         id="combo-box-demo"
-                        options={this.state.countries}
+                        options={this.props.countries}
                         getOptionLabel={option => option.name}
                         onChange={this.handleChange}
                         defaultValue={{ id: 146, code: "TW", name: "Taiwan", name_cn: "台灣", latitude: 121, longitude: 23.5, keyword: "Taiwan*" }}
@@ -291,4 +278,9 @@ class CoronaStatus extends React.Component {
     }
 }
 
-export default CoronaStatus;
+const mapStateToProps = (state) => {
+    return {
+        countries: state.countries.data
+    }
+};
+export default connect(mapStateToProps)(CoronaStatus);

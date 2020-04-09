@@ -5,10 +5,15 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from "react-apollo";
 
 import CoronaStatus from "./components/corona_status/corona_status";
+import configureStore from '../../store';
+import {fetchData} from '../../actions/actions';
+import { Provider } from 'react-redux';
 
 const client = new ApolloClient({
     uri: 'https://covid19-graphql.now.sh/'
 });
+
+const store = configureStore();
 
 class EpidemicMonitor extends React.Component {
 
@@ -19,16 +24,21 @@ class EpidemicMonitor extends React.Component {
         }
     }
 
+    componentDidMount() {
+        store.dispatch(fetchData('/countries'));
+        console.log('EpidemicOverview componentDidMount...');
+
+    }
 
     render() {
         return (
-            <div>
+            <Provider store={store}>
                 <ApolloProvider client={client}>
                     <div>
                         <CoronaStatus />
                     </div>
                 </ApolloProvider>
-            </div>
+            </Provider>
         );
     }
 }

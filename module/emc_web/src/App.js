@@ -59,7 +59,7 @@ function App() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            <h3> COVID-19 疫情監測中心 </h3>
+            <span> COVID-19 疫情監測中心 </span>
           </Typography>
         </Toolbar>
       </AppBar>

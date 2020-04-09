@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //const apiHost = window.location.protocol + "//" + window.location.host;
 const apiHost = 'http://localhost:9011';
-const apiPrefix = '';
+const apiPrefix = '/rest/v1';
 
 const prtgRequest = axios.create({
     baseURL: apiHost + apiPrefix
