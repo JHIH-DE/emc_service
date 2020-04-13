@@ -26,8 +26,6 @@ class EpidemicMonitor extends React.Component {
 
     componentDidMount() {
         store.dispatch(fetchData('/countries'));
-        console.log('EpidemicOverview componentDidMount...');
-
     }
 
     render() {
