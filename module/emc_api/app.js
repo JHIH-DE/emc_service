@@ -20,10 +20,10 @@ app.use(bodyparser.urlencoded({
 }));
 app.use(bodyparser.json());
 
-app.use(functions.passwdCrypto);
-app.use('/accounts', accounts);
-app.use('/infected_main', infected_main);
-app.use('/countries', countries);
+//app.use(functions.passwdCrypto); //密碼加密
+app.use('/rest/v1/accounts', accounts);
+app.use('/rest/v1/infected_main', infected_main);
+app.use('/rest/v1/countries', countries);
 
 const server = app.listen(conf.port, function() {
   console.log('app listening on port ' + conf.port + '!');
