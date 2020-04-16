@@ -40,7 +40,25 @@ export const apiGetInfectedMain = () => prtgRequest.get('/infected_main', {
             console.log('Error', error.message);
         }
         console.log(error);
+    });
+
+export const apiAddInfectedMain = (perms) => prtgRequest.post('/infected_main', perms,
+    {
+        validateStatus: function (status) {
+
+            return status >= 200 && status < 300; // default 狀態碼不在區間則拒絕    
+        }
     })
+    .catch(function (error) {
+        if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error);
+    });
 
 export const apiGetCountries = () => prtgRequest.get('/countries', {
     validateStatus: function (status) {
@@ -57,4 +75,4 @@ export const apiGetCountries = () => prtgRequest.get('/countries', {
             console.log('Error', error.message);
         }
         console.log(error);
-    })        
+    });        

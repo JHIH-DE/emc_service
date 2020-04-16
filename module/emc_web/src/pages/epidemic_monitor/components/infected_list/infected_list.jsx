@@ -1,6 +1,6 @@
 import React from "react";
 import './infected_list.less';
-import { apiGetInfectedMain } from "../../service";
+import { apiGetInfectedMain,apiAddInfectedMain } from "../../service";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,9 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import AddInfectedDialog from '../add_infected_dialog/add_infected_dialog';
 import TablePaginationActions from '../../../table_pagination_actions';
-
 
 class InfectedList extends React.Component {
 
@@ -21,7 +22,8 @@ class InfectedList extends React.Component {
         this.state = {
             data: [],
             rowsPerPage: 10,
-            page: 0
+            page: 0,
+            showAlert: false
         }
     }
 
@@ -35,6 +37,7 @@ class InfectedList extends React.Component {
                 console.log(err)
             })
     }
+
     handleChangePage = (event, newPage) => {
         this.setState({ page: newPage });
     };
@@ -43,10 +46,37 @@ class InfectedList extends React.Component {
         this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) });
     };
 
+    TriggerAddInfected = (event) => {
+        apiAddInfectedMain(event) .then(res => {
+            apiGetInfectedMain()
+            .then(res => {
+                this.setState({ data: res.data,showAlert:true })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    };
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        this.setState({
+            ...this.state,
+            showAlert: false,
+        })
+      };
+
     render() {
         return (
             <div>
                 <h1>台灣傳染性肺炎感染者列表</h1>
+                <AddInfectedDialog title={"新增感染者"} addInfectedItem={this.TriggerAddInfected}/>
                 <Paper style={{ width: "100%" }}>
                     <TableContainer component={Paper} className="table-content">
                         <Table stickyHeader aria-label="sticky table">
@@ -57,10 +87,10 @@ class InfectedList extends React.Component {
                                     <TableCell align="right">年</TableCell>
                                     <TableCell align="right">月</TableCell>
                                     <TableCell align="right">城市</TableCell>
-                                    <TableCell align="right">性別</TableCell>
                                     <TableCell align="right">年齡</TableCell>
+                                    <TableCell align="right">性別</TableCell>
                                     <TableCell align="right">境外移入</TableCell>
-                                    <TableCell align="right">確診</TableCell>
+                                    <TableCell align="right">確定病例</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -102,6 +132,11 @@ class InfectedList extends React.Component {
                         ActionsComponent={TablePaginationActions}
                     />
                 </Paper>
+                <Snackbar open={this.state.showAlert} autoHideDuration={3000} onClose={this.handleClose}>
+                <Alert onClose={this.handleClose} severity="success">
+                新增感染者成功！
+                </Alert>
+            </Snackbar>
             </div>
         );
     }
