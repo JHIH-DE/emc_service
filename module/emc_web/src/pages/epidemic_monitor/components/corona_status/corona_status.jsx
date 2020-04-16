@@ -11,6 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { connect } from "react-redux";
+import NumberFormat from 'react-number-format';
 
 class CoronaStatus extends React.Component {
 
@@ -342,25 +343,33 @@ class CoronaStatus extends React.Component {
                                     <Grid item xs={2}>
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"今日新增確診病例"}</h3>
-                                            <h1 className="panel_bottom_content">{newCasesToday}</h1>
+                                            <h1 className="panel_bottom_content">
+                                                <NumberFormat value={newCasesToday} displayType={'text'} thousandSeparator={true} />
+                                            </h1>
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"目前確診病例"}</h3>
-                                            <h1 className="panel_top_content">{newest.confirmed}</h1>
+                                            <h1 className="panel_top_content">
+                                                <NumberFormat value={newest.confirmed} displayType={'text'} thousandSeparator={true} />
+                                            </h1>
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"死亡"}</h3>
-                                            <h1 className="panel_top_content">{newest.deaths}</h1>
+                                            <h1 className="panel_top_content">
+                                                <NumberFormat value={newest.deaths} displayType={'text'} thousandSeparator={true} />
+                                            </h1>
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"已恢復"}</h3>
-                                            <h1 className="panel_bottom_content">{newest.recovered}</h1>
+                                            <h1 className="panel_bottom_content">
+                                                <NumberFormat value={newest.recovered} displayType={'text'} thousandSeparator={true} />
+                                            </h1>
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={2}>

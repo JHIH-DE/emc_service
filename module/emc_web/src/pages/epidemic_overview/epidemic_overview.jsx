@@ -4,8 +4,6 @@ import './epidemic_overview.less';
 import { Provider } from 'react-redux';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from "react-apollo";
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import {
     MuiPickersUtilsProvider,
@@ -14,9 +12,9 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
-import CoronaMap from "./components/corona_map/corona_map";
+import CoronaDashboard from "./components/corona_dashboard/corona_dashboard";
 import configureStore from '../../store';
-import {fetchData} from '../../actions/actions';
+import { fetchData } from '../../actions/actions';
 
 const client = new ApolloClient({
     uri: 'https://covid19-graphql.now.sh/'
@@ -31,7 +29,7 @@ class EpidemicOverview extends React.Component {
 
         this.state = {
             selectedCategory: 'confirmed',
-            selectedDate: new Date('2020-03-28')
+            selectedDate: new Date('2020-04-14')
         }
     }
 
@@ -61,7 +59,7 @@ class EpidemicOverview extends React.Component {
                                 id="date-picker-inline"
                                 label="日期"
                                 minDate={new Date('2020-01-01')}
-                                maxDate={new Date('2020-03-29')}
+                                maxDate={new Date('2020-04-16')}
                                 value={this.state.selectedDate}
                                 onChange={this.handleDateChange}
                                 KeyboardButtonProps={{
@@ -72,25 +70,10 @@ class EpidemicOverview extends React.Component {
                     </Grid>
                 </Grid>
 
-                <ToggleButtonGroup
-                    value={this.state.selectedCategory}
-                    exclusive
-                    onChange={this.handleChange}
-                    aria-label="text alignment"
-                >
-                    <ToggleButton value="confirmed" aria-label="centered">
-                        確診
-            </ToggleButton>
-                    <ToggleButton value="recovered" aria-label="centered">
-                        已恢復
-            </ToggleButton>
-                    <ToggleButton value="deaths" aria-label="centered">
-                        死亡
-            </ToggleButton>
-                </ToggleButtonGroup>
+
                 <ApolloProvider client={client}>
                     <div>
-                        <CoronaMap selectedCategory={this.state.selectedCategory} selectedDate={this.state.selectedDate} />
+                        <CoronaDashboard selectedCategory={this.state.selectedCategory} selectedDate={this.state.selectedDate} />
                     </div>
                 </ApolloProvider>
             </Provider>
