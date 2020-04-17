@@ -15,7 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListIcon from '@material-ui/icons/List';
 import Info from '@material-ui/icons/Info';
 import Search from '@material-ui/icons/Search';
-import logo from './logo.svg';
+import Dashboard from '@material-ui/icons/Dashboard';
 import './App.less';
 
 import EpidemicMonitor from "./pages/epidemic_monitor/epidemic_monitor";
@@ -75,12 +75,12 @@ function App() {
           <div className={classes.toolbar} />
           <Divider />
           <List>
-            <ListItem button component={Link} to="/" >
+            {/* <ListItem button component={Link} to="/" >
               <ListItemIcon><Info /></ListItemIcon>
               <ListItemText>關於 COVID-19</ListItemText>
-            </ListItem>
+            </ListItem> */}
             <ListItem button component={Link} to="/epidemic_overview">
-              <ListItemIcon><Search /></ListItemIcon>
+              <ListItemIcon><Dashboard /></ListItemIcon>
               <ListItemText>世界疫情總覽</ListItemText>
             </ListItem>
             <ListItem button component={Link} to="/epidemic_monitor">
@@ -94,7 +94,7 @@ function App() {
           </List>
         </Drawer>
         <main className={classes.content}>
-          <Route exact path="/" component={Introduction} />
+          <Route exact path="/" component={EpidemicOverview} />
           <Route path="/epidemic_overview" component={EpidemicOverview} />
           <Route path="/epidemic_monitor" component={EpidemicMonitor} />
           <Route path="/infected_list" component={InfectedList} />

@@ -10,19 +10,22 @@ import { CoronaRanking } from "../corona_ranking/corona_ranking";
 import { CoronaMap } from "../corona_map/corona_map";
 import Paper from '@material-ui/core/Paper';
 import NumberFormat from 'react-number-format';
-
+// import mask from '../../../../../dist/assets/mask.png';
+// import health from '../../../../../dist/assets/health.png';
+// import death from '../../../../../dist/assets/death.png';
 
 class CoronaDashboard extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            data: [],
+            selectedDate: this.props.selectedDate,
+            latestDate: this.generateLatestDate(),
             getCountryQuery: gql`
             {
                 results(
                countries: [${countries}]
-                date: {eq: "${this.props.selectedDate}"})
+                date: {gt: "${this.props.selectedDate}"})
                 {
                   country{
                     name
@@ -67,13 +70,54 @@ class CoronaDashboard extends React.Component {
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
             year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
         return [year, month, day].join('-');
+    }
+
+    generateLatestDate = () => {
+        let stopTime = new Date();
+        stopTime.setDate(stopTime.getDate() - 2);
+        return stopTime;
+    }
+
+    wrapperDataByDate = (data) => {
+        let startTime = new Date();
+        let stopTime = this.state.latestDate;
+        let processedData = {}
+        let dates = [];
+        startTime.setTime(this.props.selectedDate.getTime());
+        while (startTime < stopTime) {
+            startTime.setDate(startTime.getDate() + 1);
+            let date = this.formatDate(startTime);
+            dates.push(date);
+            processedData[date] = data.results.filter(el => el.date === date);
+        }
+        return { dates, processedData };
+    }
+
+
+    transDataToRanking = (data) => {
+        let latestData = data[this.formatDate(this.state.latestDate)];
+        const confirmed_world = latestData.map(el => el.confirmed).reduce((a, b) => a + b);
+        const recovered_world = latestData.map(el => el.recovered).reduce((a, b) => a + b);
+        const deaths_world = latestData.map(el => el.deaths).reduce((a, b) => a + b);
+
+        let temp = latestData.filter(item => (item.country.name !== "Diamond Princess" && item.country.name !== "Taiwan*"));
+        latestData = latestData.filter(item => item.country.name !== "Diamond Princess");
+
+        let taiwan = latestData.filter(item => item.country.name == "Taiwan*")[0];
+        let ranking = temp.sort((a, b) => {
+            return b[this.props.selectedCategory] - a[this.props.selectedCategory];
+        });
+        let rankingData = ranking.slice(0, 20);
+        rankingData.push(taiwan);
+
+        const latlong = this.props.latlong;
+        for (let i = 0; i < rankingData.length; i++) {
+            rankingData[i].name_cn = latlong[rankingData[i].country.name].name_cn;
+            rankingData[i].code = latlong[rankingData[i].country.name].code;
+        }
+
+        return { rankingData, confirmed_world, recovered_world, deaths_world }
     }
 
     render() {
@@ -84,26 +128,8 @@ class CoronaDashboard extends React.Component {
                         if (loading) return <div className="progress-content"> <CircularProgress /></div>;
                         if (error) return <p>Error :(</p>;
 
-                        const confirmed_world = data.results.map(el => el.confirmed).reduce((a, b) => a + b);
-                        const recovered_world = data.results.map(el => el.recovered).reduce((a, b) => a + b);
-                        const deaths_world = data.results.map(el => el.deaths).reduce((a, b) => a + b);
-
-                        data.results = data.results.filter(item => item.country.name !== "Diamond Princess");
-                        let ranking = data.results.sort((a, b) => {
-                            return b[this.props.selectedCategory] - a[this.props.selectedCategory];
-                        });
-                        let result = ranking.slice(0, 20);
-                        let rank = 1;
-                        const latlong = this.props.latlong;
-                        for (let i = 0; i < result.length; i++) {
-                            // increase rank only if current score less than previous
-                            if (i > 0 && result[i][this.props.selectedCategory] <= result[i - 1][this.props.selectedCategory]) {
-                                rank++;
-                            }
-                            result[i].rank = rank;
-                            result[i].name_cn = latlong[result[i].country.name].name_cn;
-                            result[i].code = latlong[result[i].country.name].code;
-                        }
+                        let { dates, processedData } = this.wrapperDataByDate(data);
+                        let { rankingData, confirmed_world, recovered_world, deaths_world } = this.transDataToRanking(processedData);
                         return (
                             <div>
                                 <Grid container spacing={3} style={{ padding: "20px" }}>
@@ -111,6 +137,7 @@ class CoronaDashboard extends React.Component {
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"全球累積確診病例"}</h3>
                                             <h1 className="panel_bottom_content">
+                                                {/* <img src={mask} alt="Mask" /> */}
                                                 <NumberFormat value={confirmed_world} displayType={'text'} thousandSeparator={true} />
                                             </h1>
                                         </Paper>
@@ -119,6 +146,7 @@ class CoronaDashboard extends React.Component {
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"全球累積恢復人數"}</h3>
                                             <h1 className="panel_bottom_content">
+                                                {/* <img src={health} alt="health" /> */}
                                                 <NumberFormat value={recovered_world} displayType={'text'} thousandSeparator={true} />
                                             </h1>
                                         </Paper>
@@ -127,6 +155,7 @@ class CoronaDashboard extends React.Component {
                                         <Paper elevation={0} variant="outlined" className="pane-content">
                                             <h3 className="panel_top_title">{"全球累積死亡人數"}</h3>
                                             <h1 className="panel_top_content">
+                                                {/* <img src={death} alt="Death" /> */}
                                                 <NumberFormat value={deaths_world} displayType={'text'} thousandSeparator={true} />
                                             </h1>
                                         </Paper>
@@ -135,10 +164,10 @@ class CoronaDashboard extends React.Component {
 
                                 <Grid container spacing={3}>
                                     <Grid item xs={6}>
-                                        <CoronaRanking data={result} />
+                                        <CoronaRanking data={rankingData} />
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <CoronaMap data={data.results} latlong={this.props.latlong} selectedCategory={this.props.selectedCategory} />
+                                        <CoronaMap data={processedData} dates={dates} latlong={this.props.latlong} selectedCategory={this.props.selectedCategory} />
                                     </Grid>
                                 </Grid>
                             </div>

@@ -333,7 +333,7 @@ class CoronaStatus extends React.Component {
                     {({ loading, error, data }) => {
                         if (loading) return <div className="progress-content"> <CircularProgress /></div>;
                         if (error) return <p>Error :(</p>;
-
+                        console.log(data);
                         let newest = data.country.results[data.country.results.length - 1];
                         let nearlyNew = data.country.results[data.country.results.length - 2];
                         let newCasesToday = newest.confirmed - nearlyNew.confirmed;

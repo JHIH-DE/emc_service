@@ -24,7 +24,7 @@ export function CoronaRanking(props) {
                 <Table size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>排名</TableCell>
+                            {/* <TableCell>排名</TableCell> */}
                             <TableCell align="left">國家/地區</TableCell>
                             <TableCell align="left">已確診</TableCell>
                             <TableCell align="left">恢復人數</TableCell>
@@ -33,10 +33,10 @@ export function CoronaRanking(props) {
                     </TableHead>
                     <TableBody>
                         {data.map(row => (
-                            <TableRow key={row.rank}>
-                                <TableCell component="th" scope="row">
+                            <TableRow key={row.code}>
+                                {/* <TableCell component="th" scope="row">
                                     {row.rank}
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="left">
                                     <React.Fragment>
                                         <span>{countryToFlag(row.code)}</span>

@@ -40,88 +40,187 @@ export function CoronaMap(props) {
     }
 
     const getWorldOption = (data) => {
-        let max = -Infinity;
-        let min = Infinity;
         const latlong = props.latlong;
-        data.forEach((itemOpt, index) => {
-            if (itemOpt[selectedCategory] > max) {
-                max = itemOpt[selectedCategory];
-            }
-            if (itemOpt[selectedCategory] < min) {
-                min = itemOpt[selectedCategory];
-            }
-        });
+        let timeline = [];
+        let options = [];
+        let visualMap = [];
+        for (var n = 0; n < props.dates.length; n++) {
+            timeline.push(props.dates[n]);
+            options.push({
+                title: {
+                    show: true,
+                    'text': props.dates[n] + ''
+                },
+                series: {
+                    name: props.dates[n],
+                    type: 'scatter',
+                    data: data[props.dates[n]].map((itemOpt) => {
+                        if (latlong[itemOpt.country.name] !== undefined) {
+                            return {
+                                name: latlong[itemOpt.country.name].name_cn,
+                                value: [
+                                    latlong[itemOpt.country.name].longitude,
+                                    latlong[itemOpt.country.name].latitude,
+                                    itemOpt[selectedCategory]
+                                ],
+                            };
+                        }
+                    })
+                }
+            });
+
+            let max = -Infinity;
+            let min = Infinity;
+            data[props.dates[n]].forEach((itemOpt, index) => {
+                if (itemOpt[selectedCategory] > max) {
+                    max = itemOpt[selectedCategory];
+                }
+                if (itemOpt[selectedCategory] < min) {
+                    min = itemOpt[selectedCategory];
+                }
+            });
+
+
+            visualMap.push({
+                show: false, 
+                type: 'continuous',
+                min: min,
+                max: max,
+                text: ['高', '低'],
+                calculable: true,
+                seriesIndex: n,
+                realtime:true, 
+                inRange: {
+                    color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [6, 60]
+                },
+                outOfRange: {       // 选中范围外的视觉配置
+                    symbolSize: [30, 100]
+                },
+                textStyle: {
+                    color: '#fff'
+                }
+            });
+        }
+
         if (!isEmpty(latlong)) {
             return {
-                backgroundColor: '#404a59',
-                color: ['#E3493B', '#EEBA4C', '#23B5AF', '#A9DDD9'],
-                title: {
-                    text: `COVID-19 Daily Report (${formatDate(props.selectedDate)})`,
-                    subtext: 'Data Source: CSSEGISandData/COVID-19',
-                    left: 'center',
-                    top: 'top',
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: 16
-                    }
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function (params) {
-                        var value = (params.value + '').split(',');
-                        value = value[2].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
-                        return params.name + ' : ' + value;
-                    }
-                },
-                visualMap: {
-                    min: 0,
-                    max: max,
-                    text: ['高', '低'],
-                    calculable: true,
-                    inRange: {
-                        color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [6, 60]
-                    },
-                    textStyle: {
-                        color: '#fff'
-                    }
-                },
-                geo: {
-                    name: 'World Population (2010)',
-                    type: 'map',
-                    map: 'world',
-                    label: {
-                        emphasis: {
-                            show: false
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            areaColor: '#323c48',
-                            borderColor: '#111'
+                baseOption: {
+                    timeline: {
+                        axisType: 'category',
+                        orient: 'vertical',
+                        autoPlay: true,
+                        inverse: true,
+                        playInterval: 1000,
+                        left: null,
+                        right: 0,
+                        top: 20,
+                        bottom: 20,
+                        width: 55,
+                        height: null,
+                        label: {
+                            color: '#999'
+                        },
+                        symbol: 'none',
+                        lineStyle: {
+                            color: '#555'
+                        },
+                        checkpointStyle: {
+                            color: '#bbb',
+                            borderColor: '#777',
+                            borderWidth: 2
+                        },
+                        controlStyle: {
+                            showNextBtn: false,
+                            showPrevBtn: false,
+                            color: '#666',
+                            borderColor: '#666'
                         },
                         emphasis: {
-                            areaColor: '#2a333d'
-                        }
-                    }
-                },
-                series: [
-                    {
-                        type: 'scatter',
-                        coordinateSystem: 'geo',
-                        data: data.map((itemOpt) => {
-                            if (latlong[itemOpt.country.name] !== undefined) {
-                                return {
-                                    name: latlong[itemOpt.country.name].name_cn,
-                                    value: [
-                                        latlong[itemOpt.country.name].longitude,
-                                        latlong[itemOpt.country.name].latitude,
-                                        itemOpt[selectedCategory]
-                                    ],
-                                };
+                            label: {
+                                color: '#fff'
+                            },
+                            controlStyle: {
+                                color: '#aaa',
+                                borderColor: '#aaa'
                             }
-                        })
-                    }
-                ]
+                        },
+                        data: timeline
+                    },
+                    backgroundColor: '#404a59',
+                    color: ['#E3493B', '#EEBA4C', '#23B5AF', '#A9DDD9'],
+                    title: {
+                        text: `COVID-19 Daily Report (${formatDate(props.selectedDate)})`,
+                        subtext: 'Data Source: CSSEGISandData/COVID-19',
+                        left: 'center',
+                        top: 'top',
+                        textStyle: {
+                            color: '#fff',
+                            fontSize: 16
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            var value = (params.value + '').split(',');
+                            value = value[2].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
+                            return params.name + ' : ' + value;
+                        }
+                    },
+                    visualMap: visualMap,
+                    // {
+                    //     min: 0,
+                    //     max: max,
+                    //     text: ['高', '低'],
+                    //     calculable: true,
+                    //     inRange: {
+                    //         color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [6, 60]
+                    //     },
+                    //     textStyle: {
+                    //         color: '#fff'
+                    //     }
+                    // },
+                    geo: {
+                        name: 'World Population (2010)',
+                        type: 'map',
+                        map: 'world',
+                        label: {
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#323c48',
+                                borderColor: '#111'
+                            },
+                            emphasis: {
+                                areaColor: '#2a333d'
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            name: '2020-04-12',
+                            data: data['2020-4-12'].map((itemOpt) => {
+                                if (latlong[itemOpt.country.name] !== undefined) {
+                                    return {
+                                        name: latlong[itemOpt.country.name].name_cn,
+                                        value: [
+                                            latlong[itemOpt.country.name].longitude,
+                                            latlong[itemOpt.country.name].latitude,
+                                            itemOpt[selectedCategory]
+                                        ],
+                                    };
+                                }
+                            })
+                        }
+                    ],
+                    animationDurationUpdate: 1000,
+                    animationEasingUpdate: 'quinticInOut'
+                },
+                options: options
             }
         }
         else {
@@ -149,7 +248,7 @@ export function CoronaMap(props) {
             </ToggleButtonGroup>
             <ReactEcharts
                 option={getWorldOption(data)}
-                style={{ height: '600px' }}
+                style={{ height: '650px' }}
                 className='react_for_echarts' />
         </div>
     );

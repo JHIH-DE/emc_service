@@ -29,7 +29,7 @@ class EpidemicOverview extends React.Component {
 
         this.state = {
             selectedCategory: 'confirmed',
-            selectedDate: new Date('2020-04-14')
+            selectedDate: new Date('2020-03-20')
         }
     }
 
@@ -72,9 +72,7 @@ class EpidemicOverview extends React.Component {
 
 
                 <ApolloProvider client={client}>
-                    <div>
-                        <CoronaDashboard selectedCategory={this.state.selectedCategory} selectedDate={this.state.selectedDate} />
-                    </div>
+                    <CoronaDashboard selectedCategory={this.state.selectedCategory} selectedDate={this.state.selectedDate} />
                 </ApolloProvider>
             </Provider>
         );
