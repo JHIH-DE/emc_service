@@ -7,19 +7,19 @@ var sql = '';
 
 module.exports = {
   items: function(req, callback) {
-    sql = 'SELECT * FROM accounts';
+    sql = 'SELECT * FROM coronavirus';
     return query(sql, callback);
   },
   item: function(req, callback) {
-    sql = mysql.format('SELECT * FROM accounts WHERE id = ?', [req.params.id]);
+    sql = mysql.format('SELECT * FROM coronavirus WHERE id = ?', [req.params.id]);
     return query(sql, callback);
   },
   add: function(req, callback) {
-    sql = mysql.format('INSERT INTO accounts SET ?', req.body);
+    sql = mysql.format('INSERT INTO coronavirus SET ?', req.body);
     return query(sql, callback);
   },
   delete: function(req, callback) {
-    sql = mysql.format('DELETE FROM accounts WHERE id = ?', [req.params.id]);
+    sql = mysql.format('DELETE FROM coronavirus WHERE id = ?', [req.params.id]);
     return query(sql, callback);
   },
   put: function(req, callback) {
@@ -28,14 +28,14 @@ module.exports = {
       connection.beginTransaction(function(err) {
         if (err) throw err;
 
-        sql = mysql.format('DELETE FROM accounts WHERE id = ?', [req.params.id]);
+        sql = mysql.format('DELETE FROM coronavirus WHERE id = ?', [req.params.id]);
 
         connection.query(sql, function(err, results, fields) {
           // SQL DELETE 成功 results.affectedRows 會返回 1，反之 0
           if (results.affectedRows) {
             req.body.id = req.params.id;
             console.log(req.body);
-            sql = mysql.format('INSERT INTO accounts SET ?', req.body);
+            sql = mysql.format('INSERT INTO coronavirus SET ?', req.body);
 
             connection.query(sql, function(err, results, fields) {
               // 請求不正確
@@ -61,7 +61,11 @@ module.exports = {
     });
   },
   patch: function(req, callback) {
-    sql = mysql.format('UPDATE accounts SET ? WHERE id = ?', [req.body, req.params.id]);
+    sql = mysql.format('UPDATE coronavirus SET ? WHERE id = ?', [req.body, req.params.id]);
+    return query(sql, callback);
+  },
+  update: function(req, callback) {
+    sql = mysql.format('UPDATE coronavirus SET ? WHERE id = ?', [req.body, req.params.id]);
     return query(sql, callback);
   }
 };

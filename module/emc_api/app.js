@@ -7,7 +7,7 @@ const functions = require('./functions');
 const accounts = require('./routes/accounts');
 const infected_main = require('./routes/infected_main');
 const countries = require('./routes/countries');
-
+const coronavirus = require('./routes/coronavirus');
 
 const debug = require('debug')('my-application'); // debug模块
 var app = express();
@@ -24,6 +24,7 @@ app.use(bodyparser.json());
 app.use('/rest/v1/accounts', accounts);
 app.use('/rest/v1/infected_main', infected_main);
 app.use('/rest/v1/countries', countries);
+app.use('/rest/v1/coronavirus', coronavirus);
 
 const server = app.listen(conf.port, function() {
   console.log('app listening on port ' + conf.port + '!');
