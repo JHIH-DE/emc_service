@@ -1,10 +1,6 @@
 import * as types from '../actions/actionTypes';
-import { combineReducers } from 'redux'; //might need to remove
 
-import { countryReducer } from './countryReducer'; 
-import { coronavirusReducer } from './coronavirusReducer'; 
-
-function Reducer(state = {
+function baseReducer(state = {
 	isLoading: false,
 	data: [],
 	error: false}
@@ -21,9 +17,4 @@ function Reducer(state = {
 	}
 };
 
-const rootReducer = combineReducers({
-	countries: countryReducer,
-	coronavirus: coronavirusReducer
-});
-
-export default rootReducer;
+export default baseReducer;

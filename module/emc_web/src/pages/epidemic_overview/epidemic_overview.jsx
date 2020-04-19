@@ -14,7 +14,7 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import CoronaDashboard from "./components/corona_dashboard/corona_dashboard";
 import configureStore from '../../store';
-import { fetchData } from '../../actions/actions';
+import { fetchCountryData, fetchCoronavirusData, fetchData } from '../../actions/actions';
 
 const client = new ApolloClient({
     uri: 'https://covid19-graphql.now.sh/'
@@ -34,7 +34,8 @@ class EpidemicOverview extends React.Component {
     }
 
     componentDidMount() {
-        store.dispatch(fetchData('/countries'));
+        store.dispatch(fetchCountryData());
+        store.dispatch(fetchCoronavirusData());
     }
 
     handleChange = (event, value) => {

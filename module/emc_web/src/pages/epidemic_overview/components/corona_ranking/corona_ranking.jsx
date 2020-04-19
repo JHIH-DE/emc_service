@@ -40,7 +40,7 @@ export function CoronaRanking(props) {
                                 <TableCell align="left">
                                     <React.Fragment>
                                         <span>{countryToFlag(row.code)}</span>
-                                        {row.label}  {row.name}
+       
                                     </React.Fragment>
                                     {row.name_cn}
                                 </TableCell>

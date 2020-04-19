@@ -79,32 +79,24 @@ class CoronaDashboard extends React.Component {
         return stopTime;
     }
 
-    wrapperDataByDate = (data) => {
-        let startTime = new Date();
-        let stopTime = this.state.latestDate;
-        let processedData = {}
-        let dates = [];
-        startTime.setTime(this.props.selectedDate.getTime());
-        while (startTime < stopTime) {
-            startTime.setDate(startTime.getDate() + 1);
-            let date = this.formatDate(startTime);
-            dates.push(date);
-            processedData[date] = data.results.filter(el => el.date === date);
-        }
+    wrapperDataByDate= (data) => {
+        let dates = Object.keys(data);
+        let processedData = data;
         return { dates, processedData };
     }
 
-
     transDataToRanking = (data) => {
-        let latestData = data[this.formatDate(this.state.latestDate)];
+        //let latestData = data[this.formatDate(this.state.latestDate)];
+        let latestData = data['2020-4-17'];
+
         const confirmed_world = latestData.map(el => el.confirmed).reduce((a, b) => a + b);
         const recovered_world = latestData.map(el => el.recovered).reduce((a, b) => a + b);
         const deaths_world = latestData.map(el => el.deaths).reduce((a, b) => a + b);
 
-        let temp = latestData.filter(item => (item.country.name !== "Diamond Princess" && item.country.name !== "Taiwan*"));
-        latestData = latestData.filter(item => item.country.name !== "Diamond Princess");
+        let temp = latestData.filter(item => (item.name !== "Diamond Princess" && item.name !== "Taiwan*"));
+        latestData = latestData.filter(item => item.name !== "Diamond Princess");
 
-        let taiwan = latestData.filter(item => item.country.name == "Taiwan*")[0];
+        let taiwan = latestData.filter(item => item.name === "Taiwan*")[0];
         let ranking = temp.sort((a, b) => {
             return b[this.props.selectedCategory] - a[this.props.selectedCategory];
         });
@@ -113,13 +105,12 @@ class CoronaDashboard extends React.Component {
 
         const latlong = this.props.latlong;
         for (let i = 0; i < rankingData.length; i++) {
-            rankingData[i].name_cn = latlong[rankingData[i].country.name].name_cn;
-            rankingData[i].code = latlong[rankingData[i].country.name].code;
+            rankingData[i].name_cn = latlong[rankingData[i].name].name_cn;
+            rankingData[i].code = latlong[rankingData[i].name].code;
         }
 
         return { rankingData, confirmed_world, recovered_world, deaths_world }
     }
-
     render() {
         return (
             <div>
@@ -128,7 +119,7 @@ class CoronaDashboard extends React.Component {
                         if (loading) return <div className="progress-content"> <CircularProgress /></div>;
                         if (error) return <p>Error :(</p>;
 
-                        let { dates, processedData } = this.wrapperDataByDate(data);
+                        let { dates, processedData } = this.wrapperDataByDate(this.props.coronavirus);
                         let { rankingData, confirmed_world, recovered_world, deaths_world } = this.transDataToRanking(processedData);
                         return (
                             <div>
@@ -184,8 +175,10 @@ const mapStateToProps = (state) => {
     state.countries.data.forEach(item => {
         temp[item.keyword] = item;
     });
+
     return {
-        latlong: temp
+        latlong: temp,
+        coronavirus: state.coronavirus.data
     }
 };
 

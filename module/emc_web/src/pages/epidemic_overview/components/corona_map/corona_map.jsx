@@ -8,7 +8,7 @@ require('echarts/map/js/world.js');
 
 export function CoronaMap(props) {
     const [data, setData] = useState(props.data);
-    const [selectedCategory, setSelectedCategory] = useState('confirmed');
+    const [selectedCategory, setSelectedCategory] = useState('new_confirmed');
 
     const formatDate = (date) => {
         var d = new Date(date),
@@ -55,12 +55,12 @@ export function CoronaMap(props) {
                     name: props.dates[n],
                     type: 'scatter',
                     data: data[props.dates[n]].map((itemOpt) => {
-                        if (latlong[itemOpt.country.name] !== undefined) {
+                        if (latlong[itemOpt.name] !== undefined) {
                             return {
-                                name: latlong[itemOpt.country.name].name_cn,
+                                name: latlong[itemOpt.name].name_cn,
                                 value: [
-                                    latlong[itemOpt.country.name].longitude,
-                                    latlong[itemOpt.country.name].latitude,
+                                    latlong[itemOpt.name].longitude,
+                                    latlong[itemOpt.name].latitude,
                                     itemOpt[selectedCategory]
                                 ],
                             };
@@ -82,14 +82,14 @@ export function CoronaMap(props) {
 
 
             visualMap.push({
-                show: false, 
+                show: false,
                 type: 'continuous',
                 min: min,
                 max: max,
                 text: ['高', '低'],
                 calculable: true,
                 seriesIndex: n,
-                realtime:true, 
+                realtime: true,
                 inRange: {
                     color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [6, 60]
                 },
@@ -202,14 +202,14 @@ export function CoronaMap(props) {
                         {
                             type: 'scatter',
                             coordinateSystem: 'geo',
-                            name: '2020-04-12',
-                            data: data['2020-4-12'].map((itemOpt) => {
-                                if (latlong[itemOpt.country.name] !== undefined) {
+                            name: '2020-01-31',
+                            data: data['2020-1-31'].map((itemOpt) => {
+                                if (latlong[itemOpt.name] !== undefined) {
                                     return {
-                                        name: latlong[itemOpt.country.name].name_cn,
+                                        name: latlong[itemOpt.name].name_cn,
                                         value: [
-                                            latlong[itemOpt.country.name].longitude,
-                                            latlong[itemOpt.country.name].latitude,
+                                            latlong[itemOpt.name].longitude,
+                                            latlong[itemOpt.name].latitude,
                                             itemOpt[selectedCategory]
                                         ],
                                     };
@@ -236,6 +236,9 @@ export function CoronaMap(props) {
                 exclusive
                 onChange={handleChange}
                 aria-label="text alignment">
+                <ToggleButton value="new_confirmed" aria-label="centered">
+                    新增病例
+                    </ToggleButton>
                 <ToggleButton value="confirmed" aria-label="centered">
                     確診
                     </ToggleButton>

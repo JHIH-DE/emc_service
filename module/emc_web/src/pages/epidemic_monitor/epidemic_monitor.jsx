@@ -6,7 +6,7 @@ import { ApolloProvider } from "react-apollo";
 
 import CoronaStatus from "./components/corona_status/corona_status";
 import configureStore from '../../store';
-import {fetchData} from '../../actions/actions';
+import { fetchCountryData, fetchCoronavirusData, fetchData } from '../../actions/actions';
 import { Provider } from 'react-redux';
 
 const client = new ApolloClient({
@@ -25,16 +25,14 @@ class EpidemicMonitor extends React.Component {
     }
 
     componentDidMount() {
-        store.dispatch(fetchData('/countries'));
+        store.dispatch(fetchCountryData());
     }
 
     render() {
         return (
             <Provider store={store}>
                 <ApolloProvider client={client}>
-                    <div>
                         <CoronaStatus />
-                    </div>
                 </ApolloProvider>
             </Provider>
         );

@@ -46,7 +46,7 @@ class InfectedList extends React.Component {
         this.setState({ page: 0, rowsPerPage: parseInt(event.target.value, 10) });
     };
 
-    TriggerAddInfected = (event) => {
+    triggerAddInfected = (event) => {
         apiAddInfectedMain(event) .then(res => {
             apiGetInfectedMain()
             .then(res => {
@@ -76,7 +76,7 @@ class InfectedList extends React.Component {
         return (
             <div>
                 <h1>台灣傳染性肺炎感染者列表</h1>
-                <AddInfectedDialog title={"新增感染者"} addInfectedItem={this.TriggerAddInfected}/>
+                <AddInfectedDialog title={"新增感染者"} addInfectedItem={this.triggerAddInfected}/>
                 <Paper style={{ width: "100%" }}>
                     <TableContainer component={Paper} className="table-content">
                         <Table stickyHeader aria-label="sticky table">
