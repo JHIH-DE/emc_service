@@ -10,6 +10,10 @@ module.exports = {
     sql = 'SELECT * FROM coronavirus';
     return query(sql, callback);
   },
+  itemsByDate: function(req, callback) {
+    sql = mysql.format('SELECT * FROM coronavirus WHERE DATE(create_time) = ?', [req.params.date]);
+    return query(sql, callback);
+  },
   item: function(req, callback) {
     sql = mysql.format('SELECT * FROM coronavirus WHERE id = ?', [req.params.id]);
     return query(sql, callback);

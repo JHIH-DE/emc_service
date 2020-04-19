@@ -9,6 +9,21 @@ router.route('/')
   // 取得所有資源
   .get(function(req, res) {
     coronavirus.items(req, function(err, results, fields) {
+      const startDate = "2020-01-31";
+      const endDate = "2020-04-18";
+      let startTime = new Date(startDate);
+      let endTime = new Date(endDate);
+      let processedData = {};
+
+      while (startTime < endTime) {
+        let date = coronaService.formatDate(startTime);
+        let string = JSON.stringify(results);
+        let data = JSON.parse(string);
+        let returned = data.filter(el => coronaService.formatDate(el.create_time) === date);
+        processedData[date] = returned;
+        startTime.setDate(startTime.getDate() + 7);
+      }
+
       if (err) {
         res.sendStatus(500);
         return console.error(err);
@@ -19,9 +34,11 @@ router.route('/')
         res.sendStatus(404);
         return;
       }
-      res.json(results);
+      res.json(processedData);
     });
   })
+
+
   // 新增一筆資源
   .post(function(req, res) {
     coronavirus.add(req, function(err, results, fields) {
@@ -111,11 +128,10 @@ router.route('/:id')
 
 router.route('/create')
   // 取得所有資源
-  .get(function(req, res) => {
+  .get(function(req, res) {
     coronaService.create();
 
 
     res.send('All coronavirus data has been imported into the database.')
   });
-})
 module.exports = router;

@@ -21,14 +21,13 @@ const query = `{
 
 const endpoint = 'https://covid19-graphql.now.sh/';
 
-const getYesterday = (date) => {
+function getYesterday(date) {
   let res = date.split("-");
   let month = res[1],
     day = res[2] - 1,
     year = res[0];
   return [year, month, day].join('-');
 }
-
 
 var coronaService = {
   create: async function() {
@@ -79,6 +78,13 @@ var coronaService = {
     return {
       endpoint: endpoint
     };
+  },
+  formatDate: function(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+    return [year, month, day].join('-');
   },
   info: function(info) {
     console.log('Info: ' + info);
