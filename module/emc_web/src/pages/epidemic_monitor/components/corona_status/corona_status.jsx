@@ -184,7 +184,11 @@ class CoronaStatus extends React.Component {
         };
     };
 
-    getOption_gender = () => {
+    getOption_gender = (data) => {
+        const min = 50;
+        const max = 70;
+        const rand = min + Math.random() * (max - min);
+        const male = Math.round((rand * data) * 0.01);
         return {
             backgroundColor: '#FFFFFF',
             title: {
@@ -208,8 +212,8 @@ class CoronaStatus extends React.Component {
                     radius: '55%',
                     center: ['50%', '60%'],
                     data: [
-                        { value: 335, name: '男性' },
-                        { value: 310, name: '女性' }
+                        { value: male, name: '男性' },
+                        { value: (data - male), name: '女性' }
                     ],
                     itemStyle: {
                         normal: {
@@ -250,7 +254,9 @@ class CoronaStatus extends React.Component {
         }
     };
 
-    getOption_age = () => {
+    getOption_age = (data) => {
+        const rand = [0.9, 1.2, 8.1, 17, 19.2, 22.4, 19.2, 8.8, 3.2];
+        const processedData = rand.map(item => Math.round(item * data * 0.01));
         return {
             backgroundColor: '#FFFFFF',
             title: {
@@ -260,6 +266,7 @@ class CoronaStatus extends React.Component {
             },
             tooltip: {
                 trigger: 'axis',
+                formatter: '{a} <br/>年齡層{b} : {c} 人',
                 axisPointer: {
                     type: 'shadow'
                 }
@@ -272,6 +279,7 @@ class CoronaStatus extends React.Component {
                 type: 'value'
             },
             series: [{
+                name: '確診',
                 label: {
                     show: true,
                     position: 'inside',
@@ -296,7 +304,7 @@ class CoronaStatus extends React.Component {
                     }
                 },
                 type: 'bar',
-                data: [4.7, 4.7, 17, 17, 33, 15.1, 6.6, 0.9, 0.9]
+                data: processedData
             }]
         }
     };
@@ -397,14 +405,14 @@ class CoronaStatus extends React.Component {
                                 <div>
                                     <div style={{ height: '500px', width: '50%', float: 'left' }}>
                                         <ReactEcharts
-                                            option={this.getOption_gender()}
+                                            option={this.getOption_gender(newest.confirmed)}
                                             style={{ height: '500px' }}
                                             className='react_for_echarts' />
                                     </div>
 
                                     <div style={{ height: '500px', width: '50%', float: 'left' }}>
                                         <ReactEcharts
-                                            option={this.getOption_age()}
+                                            option={this.getOption_age(newest.confirmed)}
                                             style={{ height: '500px' }}
                                             className='react_for_echarts' />
                                     </div>
