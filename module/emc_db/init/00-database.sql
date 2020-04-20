@@ -46,3 +46,16 @@ CREATE TABLE IF NOT EXISTS countries
   longitude float NOT NULL,
   keyword varchar(64)
 );
+
+CREATE TABLE IF NOT EXISTS coronavirus
+(
+  id SERIAL PRIMARY KEY,
+  name varchar(32) NOT NULL,
+  confirmed INTEGER NOT NULL,
+  recovered INTEGER NOT NULL,
+  deaths INTEGER NOT NULL,
+  new_confirmed INTEGER NOT NULL,
+  no_symptom INTEGER NOT NULL,
+  create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT uc_name UNIQUE (name,create_time)   
+);
