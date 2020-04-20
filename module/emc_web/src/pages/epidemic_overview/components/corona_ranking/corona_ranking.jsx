@@ -4,20 +4,23 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
+import EnhancedTableHead from '../../../enhanced_table_head';
 
 export function CoronaRanking(props) {
     const [data, setData] = useState([]);
     const [latlong, setLatlong] = useState(props.latlong);
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('new_confirmed');
 
     const countryToFlag = (isoCode) => {
         return typeof String.fromCodePoint !== 'undefined'
             ? isoCode.toUpperCase().replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397))
             : isoCode;
     }
-    
+
     useEffect(() => {
         if (props.data.length > 0) {
             let temp = props.data.filter(item => (item.name !== "Diamond Princess" && item.name !== "Taiwan*"));
@@ -38,25 +41,50 @@ export function CoronaRanking(props) {
 
     }, []);
 
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const descendingComparator = (a, b, orderBy) => {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
+    };
+
+    const getComparator = (order, orderBy) => {
+        return order === 'desc'
+            ? (a, b) => descendingComparator(a, b, orderBy)
+            : (a, b) => -descendingComparator(a, b, orderBy);
+    };
+
+    const stableSort = (array, comparator) => {
+        const stabilizedThis = array.map((el, index) => [el, index]);
+        stabilizedThis.sort((a, b) => {
+            const order = comparator(a[0], b[0]);
+            if (order !== 0) return order;
+            return a[1] - b[1];
+        });
+        return stabilizedThis.map((el) => el[0]);
+    };
+
     return (
         <div>
             <TableContainer component={Paper}>
                 <Table size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            {/* <TableCell>排名</TableCell> */}
-                            <TableCell align="left">國家/地區</TableCell>
-                            <TableCell align="left">已確診</TableCell>
-                            <TableCell align="left">恢復人數</TableCell>
-                            <TableCell align="left">死亡人數</TableCell>
-                        </TableRow>
-                    </TableHead>
+                    <EnhancedTableHead
+                        order={order}
+                        orderBy={orderBy}
+                        onRequestSort={handleRequestSort}
+                    />
                     <TableBody>
-                        {data.map(row => (
+                        {stableSort(data, getComparator(order, orderBy)).map(row => (
                             <TableRow key={row.code}>
-                                {/* <TableCell component="th" scope="row">
-                                    {row.rank}
-                                </TableCell> */}
                                 <TableCell align="left">
                                     <React.Fragment>
                                         <span>{countryToFlag(row.code)}</span>
@@ -64,7 +92,9 @@ export function CoronaRanking(props) {
                                     </React.Fragment>
                                     {row.name_cn}
                                 </TableCell>
+                                <TableCell align="left">{row.new_confirmed}</TableCell>
                                 <TableCell align="left">{row.confirmed}</TableCell>
+                                <TableCell align="left">{row.no_symptom}</TableCell>
                                 <TableCell align="left">{row.recovered}</TableCell>
                                 <TableCell align="left">{row.deaths}</TableCell>
                             </TableRow>
