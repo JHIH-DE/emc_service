@@ -1,21 +1,23 @@
 import * as types from '../actions/actionTypes';
 import { combineReducers } from 'redux'; //might need to remove
 
-import { countryReducer } from './countryReducer'; 
-import { coronavirusReducer } from './coronavirusReducer'; 
+import { countryReducer } from './countryReducer';
+import { coronavirusReducer } from './coronavirusReducer';
+import { worldDataReducer } from './worldDataReducer';
 
 function Reducer(state = {
 	isLoading: false,
 	data: [],
-	error: false}
-, action = null) {
-	switch(action.type) {
+	error: false
+}
+	, action = null) {
+	switch (action.type) {
 		case types.RECV_ERROR:
-			return Object.assign({}, state, {isLoading: false, data: action.data, error: true});
+			return Object.assign({}, state, { isLoading: false, data: action.data, error: true });
 		case types.RECV_DATA:
-			return Object.assign({}, state, {isLoading: false, data: action.data, error: false });
+			return Object.assign({}, state, { isLoading: false, data: action.data, error: false });
 		case types.REQ_DATA:
-			return Object.assign({}, state, {isLoading: true, error: false });
+			return Object.assign({}, state, { isLoading: true, error: false });
 		default:
 			return state;
 	}
@@ -23,7 +25,8 @@ function Reducer(state = {
 
 const rootReducer = combineReducers({
 	countries: countryReducer,
-	coronavirus: coronavirusReducer
+	coronavirus: coronavirusReducer,
+	worldData: worldDataReducer
 });
 
 export default rootReducer;

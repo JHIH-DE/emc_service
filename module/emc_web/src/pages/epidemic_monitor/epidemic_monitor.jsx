@@ -1,12 +1,11 @@
 import React from "react";
 import './epidemic_monitor.less';
-import { apiGetInfectedMain } from "./service";
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from "react-apollo";
 
 import CoronaStatus from "./components/corona_status/corona_status";
 import configureStore from '../../store';
-import { fetchCountryData, fetchCoronavirusData, fetchData } from '../../actions/actions';
+import { fetchCountryData } from '../../actions/actions';
 import { Provider } from 'react-redux';
 
 const client = new ApolloClient({

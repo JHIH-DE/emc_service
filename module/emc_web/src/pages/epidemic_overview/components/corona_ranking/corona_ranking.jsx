@@ -1,4 +1,4 @@
-import React, { useState, useRef} from "react";
+import React, { useState, useEffect } from "react";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,17 +9,37 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 export function CoronaRanking(props) {
-    const [data, setData] = useState(props.data);
-    const [style, setStyle] = useState(props.style);
+    const [data, setData] = useState([]);
+    const [latlong, setLatlong] = useState(props.latlong);
 
     const countryToFlag = (isoCode) => {
         return typeof String.fromCodePoint !== 'undefined'
             ? isoCode.toUpperCase().replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397))
             : isoCode;
     }
+    
+    useEffect(() => {
+        if (props.data.length > 0) {
+            let temp = props.data.filter(item => (item.name !== "Diamond Princess" && item.name !== "Taiwan*"));
+            let data = props.data.filter(item => item.name !== "Diamond Princess");
+
+            let taiwan = data.filter(item => item.name === "Taiwan*")[0];
+            let ranking = temp.sort((a, b) => {
+                return b['confirmed'] - a['confirmed'];
+            });
+            let rankingData = ranking.slice(0, 20);
+            rankingData.push(taiwan);
+            for (let i = 0; i < rankingData.length; i++) {
+                rankingData[i].name_cn = latlong[rankingData[i].name].name_cn;
+                rankingData[i].code = latlong[rankingData[i].name].code;
+            }
+            setData(rankingData);
+        }
+
+    }, []);
 
     return (
-        <div style={style}>
+        <div>
             <TableContainer component={Paper}>
                 <Table size="small" aria-label="a dense table">
                     <TableHead>
@@ -40,7 +60,7 @@ export function CoronaRanking(props) {
                                 <TableCell align="left">
                                     <React.Fragment>
                                         <span>{countryToFlag(row.code)}</span>
-       
+
                                     </React.Fragment>
                                     {row.name_cn}
                                 </TableCell>
