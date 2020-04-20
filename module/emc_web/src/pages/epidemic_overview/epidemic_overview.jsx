@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './epidemic_overview.less';
 
 import { Provider } from 'react-redux';
@@ -8,27 +8,19 @@ import { fetchCountryData, fetchCoronavirusData } from '../../actions/actions';
 
 const store = configureStore();
 
-class EpidemicOverview extends React.Component {
 
-    constructor(props) {
-        super(props);
+export default function EpidemicOverview(props) {
 
-        this.state = {
-        }
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         store.dispatch(fetchCountryData());
         store.dispatch(fetchCoronavirusData());
-    }
+    }, []);
 
-    render() {
-        return (
-            <Provider store={store}>
-                    <CoronaDashboard/>
-            </Provider>
-        );
-    }
+    return (
+        <Provider store={store}>
+            <CoronaDashboard />
+        </Provider>
+    );
+
 }
 
-export default EpidemicOverview;
