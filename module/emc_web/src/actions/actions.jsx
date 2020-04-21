@@ -1,7 +1,8 @@
 import * as types from './actionTypes';
 import axios from 'axios';
 
-const apiHost = 'http://localhost:9011';
+//const apiHost = 'http://localhost:9011';
+const apiHost = window.location.protocol + "//" + window.location.host;
 const apiPrefix = '/rest/v1';
 
 function requestData() {

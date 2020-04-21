@@ -30,7 +30,7 @@ function getYesterday(date) {
 }
 
 var coronaService = {
-  create: async function() {
+  importData: async function() {
     const data = await request(endpoint, query);
     const result = data["results"]
 
@@ -64,9 +64,8 @@ var coronaService = {
             no_symptom: no_symptom,
             create_time: currentData["date"]
           }
-          console.log(req);
 
-          coronavirus.add(req, function(err, results, fields) {
+          coronavirus.import(req, function(err, results, fields) {
             if (err) {
               return console.error(err);
             }

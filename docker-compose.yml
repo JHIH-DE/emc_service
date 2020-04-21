@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  emc-api:
+    # restart: always
+    image: emc-api:latest
+    container_name: emc_api
+    volumes:
+      - ./var/log/emc-api:/var/log/emc-api
+      - ./var/emc:/var/emc
+    depends_on:
+      - emc-db
+    ports:
+      - 9011:9011
+
+  emc-web:
+    # restart: always
+    image: emc-web:latest
+    container_name: emc_web
+    ports:
+      - 28080:80
+    volumes:
+      - ./var/log/nginx:/var/log/nginx
+    depends_on:
+      - emc-api
+
+  emc-db:
+    image: emc-db:latest
+    container_name: emc_db
+    ports:
+      - 23306:3306
+    env_file:
+      - emc-db.env
+    volumes:
+      - emc-db:/var/lib/mysql
+
+volumes:
+  emc-db :

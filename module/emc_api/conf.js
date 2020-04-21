@@ -1,10 +1,10 @@
 module.exports = {
   db: {
-    host: '0.0.0.0',
+    host: 'emc-db',
     user: 'root',
     password: 'my-password',
     database: 'emc_db',
-    port: 23306
+    port: 3306
   },
   port: 9011,
   // 自訂密碼的加鹽

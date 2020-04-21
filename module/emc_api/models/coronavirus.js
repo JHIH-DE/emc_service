@@ -22,6 +22,10 @@ module.exports = {
     sql = mysql.format('INSERT INTO coronavirus SET ?', req.body);
     return query(sql, callback);
   },
+  import: function(req, callback) {
+    sql = mysql.format('INSERT INTO coronavirus SET ?', req);
+    return query(sql, callback);
+  },
   delete: function(req, callback) {
     sql = mysql.format('DELETE FROM coronavirus WHERE id = ?', [req.params.id]);
     return query(sql, callback);

@@ -52,6 +52,14 @@ router.route('/')
     });
   });
 
+router.route('/importData')
+  // 取得所有資源
+  .get(function(req, res) {
+    console.log("importData");
+    coronaService.importData();
+    res.send('All coronavirus data has been imported into the database.')
+  });
+
 // 獲取如 /coronavirus/1 請求
 router.route('/:id')
   // 取得指定的一筆資源
@@ -126,12 +134,5 @@ router.route('/:id')
     });
   });
 
-router.route('/create')
-  // 取得所有資源
-  .get(function(req, res) {
-    coronaService.create();
 
-
-    res.send('All coronavirus data has been imported into the database.')
-  });
 module.exports = router;
