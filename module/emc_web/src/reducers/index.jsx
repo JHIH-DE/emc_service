@@ -4,6 +4,7 @@ import { combineReducers } from 'redux'; //might need to remove
 import { countryReducer } from './countryReducer';
 import { coronavirusReducer } from './coronavirusReducer';
 import { worldDataReducer } from './worldDataReducer';
+import {infectedReducer} from './infectedReducer';
 
 function Reducer(state = {
 	isLoading: false,
@@ -24,6 +25,7 @@ function Reducer(state = {
 };
 
 const rootReducer = combineReducers({
+	infectedes: infectedReducer,
 	countries: countryReducer,
 	coronavirus: coronavirusReducer,
 	worldData: worldDataReducer

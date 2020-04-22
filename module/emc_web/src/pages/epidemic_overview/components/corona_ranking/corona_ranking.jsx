@@ -39,7 +39,7 @@ export function CoronaRanking(props) {
             setData(rankingData);
         }
 
-    }, []);
+    }, [props.data]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';

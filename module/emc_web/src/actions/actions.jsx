@@ -1,8 +1,8 @@
 import * as types from './actionTypes';
 import axios from 'axios';
 
-//const apiHost = 'http://localhost:9011';
-const apiHost = window.location.protocol + "//" + window.location.host;
+const apiHost = 'http://localhost:9011';
+//const apiHost = window.location.protocol + "//" + window.location.host;
 const apiPrefix = '/rest/v1';
 
 function requestData() {
@@ -56,6 +56,25 @@ function receiveCoronavirusData(json, dates) {
 function receiveCoronavirusError(json) {
     return {
         type: types.RECV_CORONAVIRUS_ERROR,
+        data: json
+    }
+};
+
+function requestInfectedData() {
+    return { type: types.REQ_INFECTED_DATA }
+};
+
+function receiveInfectedData(json, dates) {
+    return {
+        type: types.RECV_INFECTED_DATA,
+        data: json,
+        dates: dates
+    }
+};
+
+function receiveInfectedError(json) {
+    return {
+        type: types.RECV_INFECTED_ERROR,
         data: json
     }
 };
@@ -140,6 +159,49 @@ export function fetchCoronavirusData() {
             })
             .catch(function (response) {
                 dispatch(receiveCoronavirusError(response.data));
+                //dispatch(pushState(null, '/error'));
+            })
+    }
+};
+
+export function fetchInfectedData() {
+    return function (dispatch) {
+        dispatch(requestInfectedData());
+        const url = '/infected_main';
+        return axios({
+            url: apiHost + apiPrefix + url,
+            timeout: 20000,
+            method: 'get',
+            responseType: 'json'
+        })
+            .then(function (response) {
+                dispatch(receiveInfectedData(response.data));
+            })
+            .catch(function (response) {
+                dispatch(receiveInfectedError(response.data));
+                //dispatch(pushState(null, '/error'));
+            })
+    }
+};
+
+export function addInfectedData(perms
+    ) {
+    return function (dispatch) {
+        //dispatch(requestInfectedData());
+        const url = '/infected_main';
+        return axios({
+            url: apiHost + apiPrefix + url,
+            data: perms,
+            timeout: 20000,
+            method: 'post',
+            responseType: 'json'
+        })
+            .then(function (response) {
+                return response;
+                //dispatch(receiveInfectedData(response.data));
+            })
+            .catch(function (response) {
+                //dispatch(receiveInfectedError(response.data));
                 //dispatch(pushState(null, '/error'));
             })
     }

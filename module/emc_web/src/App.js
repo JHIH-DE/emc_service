@@ -13,14 +13,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListIcon from '@material-ui/icons/List';
-import Info from '@material-ui/icons/Info';
 import Search from '@material-ui/icons/Search';
 import Dashboard from '@material-ui/icons/Dashboard';
 import './App.less';
 
 import EpidemicMonitor from "./pages/epidemic_monitor/epidemic_monitor";
-import Introduction from "./pages/introduction/introduction";
-import InfectedList from "./pages/epidemic_monitor/components/infected_list/infected_list";
+import EpidemicManager from "./pages/epidemic_manager/epidemic_manager";
 import EpidemicOverview from "./pages/epidemic_overview/epidemic_overview";
 
 const drawerWidth = 240;
@@ -87,7 +85,7 @@ function App() {
               <ListItemIcon><Search /></ListItemIcon>
               <ListItemText>各國疫情查詢</ListItemText>
             </ListItem>
-            <ListItem button component={Link} to="/infected_list">
+            <ListItem button component={Link} to="/epidemic_manager">
             <ListItemIcon><ListIcon /></ListItemIcon>
               <ListItemText>台灣感染者登錄</ListItemText>
             </ListItem>
@@ -97,7 +95,7 @@ function App() {
           <Route exact path="/" component={EpidemicOverview} />
           <Route path="/epidemic_overview" component={EpidemicOverview} />
           <Route path="/epidemic_monitor" component={EpidemicMonitor} />
-          <Route path="/infected_list" component={InfectedList} />
+          <Route path="/epidemic_manager" component={EpidemicManager} />
         </main>
       </Router>
     </div>
