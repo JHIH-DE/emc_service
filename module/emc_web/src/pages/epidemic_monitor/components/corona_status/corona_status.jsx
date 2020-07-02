@@ -192,8 +192,8 @@ class CoronaStatus extends React.Component {
         return {
             backgroundColor: '#FFFFFF',
             title: {
-                text: 'The gender based distribution of the COVID-19 confirmed cases',
-                subtext: 'This chart no longer updates due to the termination of the source by the Epidemiology Unit.',
+                text: 'COVID-19確診病例的性別分佈',
+                subtext: 'The gender-based distribution of the COVID-19 confirmed cases.',
                 left: 'center'
             },
             tooltip: {
@@ -201,16 +201,16 @@ class CoronaStatus extends React.Component {
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
             legend: {
-                orient: 'vertical',
-                left: 'left',
+                bottom: 10,
+                left: 'center',
                 data: ['男性', '女性']
             },
             series: [
                 {
                     name: '確診',
                     type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
+                    radius: '65%',
+                    center: ['50%', '50%'],
                     data: [
                         { value: male, name: '男性' },
                         { value: (data - male), name: '女性' }
@@ -260,8 +260,8 @@ class CoronaStatus extends React.Component {
         return {
             backgroundColor: '#FFFFFF',
             title: {
-                text: 'The age based distribution of the COVID-19 confirmed cases',
-                subtext: 'This chart no longer updates due to the termination of the source by the Epidemiology Unit.',
+                text: 'COVID-19確診病例的年齡分佈',
+                subtext: 'The age-based distribution of the COVID-19 confirmed cases',
                 left: 'center'
             },
             tooltip: {
@@ -400,13 +400,13 @@ class CoronaStatus extends React.Component {
                                 </Grid>
                                 <ReactEcharts
                                     option={this.getOption(data.country.results)}
-                                    style={{ height: '500px', width: '100%' }}
+                                    style={{ height: '450px', width: '100%' }}
                                     className='react_for_echarts' />
                                 <div>
-                                    <div style={{ height: '500px', width: '50%', float: 'left' }}>
+                                    <div style={{ width: '50%', float: 'left' }}>
                                         <ReactEcharts
                                             option={this.getOption_gender(newest.confirmed)}
-                                            style={{ height: '500px' }}
+                                            style={{ height: '450px' }}
                                             className='react_for_echarts' />
                                     </div>
 

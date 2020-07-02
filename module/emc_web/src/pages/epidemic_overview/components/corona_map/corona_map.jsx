@@ -115,7 +115,7 @@ export function CoronaMap(props) {
                         right: 0,
                         top: 20,
                         bottom: 20,
-                        width: 55,
+                        width: 65,
                         height: null,
                         label: {
                             color: '#999'
@@ -251,7 +251,7 @@ export function CoronaMap(props) {
             </ToggleButtonGroup>
             <ReactEcharts
                 option={getWorldOption(data)}
-                style={{ height: '650px' }}
+                style={{ height: '55vh' }}
                 className='react_for_echarts' />
         </div>
     );

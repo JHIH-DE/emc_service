@@ -4,11 +4,11 @@ import axios from 'axios';
 const apiHost = 'http://localhost:9011';
 const apiPrefix = '/rest/v1';
 
-const prtgRequest = axios.create({
+const request = axios.create({
     baseURL: apiHost + apiPrefix
 })
 
-prtgRequest.interceptors.response.use(function (response) {
+request.interceptors.response.use(function (response) {
     //get response do ...
     return response;
 }, function (error) {
@@ -16,7 +16,7 @@ prtgRequest.interceptors.response.use(function (response) {
     return Promise.reject(error);
 });
 
-prtgRequest.interceptors.request.use(function (config) {
+request.interceptors.request.use(function (config) {
     //before sending request,do ...
     return config;
 }, function (error) {
@@ -25,7 +25,7 @@ prtgRequest.interceptors.request.use(function (config) {
 });
 
 
-export const apiGetInfectedMain = () => prtgRequest.get('/infected_main', {
+export const apiGetInfectedMain = () => request.get('/infected_main', {
     validateStatus: function (status) {
 
         return status >= 200 && status < 300; // default 狀態碼不在區間則拒絕    
@@ -42,7 +42,7 @@ export const apiGetInfectedMain = () => prtgRequest.get('/infected_main', {
         console.log(error);
     })
 
-export const apiGetCountries = () => prtgRequest.get('/countries', {
+export const apiGetCountries = () => request.get('/countries', {
     validateStatus: function (status) {
 
         return status >= 200 && status < 300; // default 狀態碼不在區間則拒絕    

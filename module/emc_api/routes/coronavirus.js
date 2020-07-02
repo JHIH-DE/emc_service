@@ -10,7 +10,7 @@ router.route('/')
   .get(function(req, res) {
     coronavirus.items(req, function(err, results, fields) {
       const startDate = "2020-01-31";
-      const endDate = "2020-04-18";
+      const endDate = "2020-06-30";
       let startTime = new Date(startDate);
       let endTime = new Date(endDate);
       let processedData = {};
@@ -21,7 +21,7 @@ router.route('/')
         let data = JSON.parse(string);
         let returned = data.filter(el => coronaService.formatDate(el.create_time) === date);
         processedData[date] = returned;
-        startTime.setDate(startTime.getDate() + 7);
+        startTime.setDate(startTime.getDate() + 14);
       }
 
       if (err) {

@@ -21,11 +21,12 @@ export default function CoronaDashboard(props) {
     });
     const coronavirus = useSelector(state => state.coronavirus);
     const worldData = useSelector(state => state.worldData);
+    
     return (
         <div>
             {coronavirus.isLoading ? <div className="progress-content"> <CircularProgress /></div> :
                 <div>
-                    <Grid container spacing={3} style={{ padding: "20px" }}>
+                    <Grid container spacing={3} style={{ padding: "20px" }} >
                         <Grid item xs={3}>
                             <Paper elevation={0} variant="outlined" className="pane-content">
                                 <h3 className="panel_top_title">{"全球新增確診病例"}</h3>
@@ -66,7 +67,7 @@ export default function CoronaDashboard(props) {
 
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
-                            {worldData.latestData.length === 0 ? <div className="progress-content"> <CircularProgress /></div> : <CoronaRanking data={worldData.latestData} latlong={latlong} />}
+                            {worldData.latestData.length === 0 ? <div className="progress-content"> <CircularProgress /></div> : <CoronaRanking style={{ height: "50%" }} data={worldData.latestData} latlong={latlong} />}
                         </Grid>
                         <Grid item xs={6}>
                             <CoronaMap data={coronavirus.data} dates={coronavirus.dates} latlong={latlong}/>

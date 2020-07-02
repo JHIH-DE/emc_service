@@ -74,7 +74,7 @@ export function CoronaRanking(props) {
     };
 
     return (
-        <div>
+        <div style={{ height: '60vh', overflow: 'scroll' }}>
             <TableContainer component={Paper}>
                 <Table size="small" aria-label="a dense table">
                     <EnhancedTableHead
