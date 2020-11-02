@@ -7,7 +7,7 @@ var coronavirus = require('../models/coronavirus');
 const query = `{
   results(
  countries: [${countries}]
-  date: {gt: "2020-1-22"})
+  date: {gt: "2020-2-2"})
   {
     country{
       name
@@ -52,6 +52,7 @@ var coronaService = {
         if (prevData.length > 0) {
 
           let new_confirmed = currentData["confirmed"] - prevData[0]["confirmed"];
+          let new_deaths = currentData["deaths"] - prevData[0]["deaths"];
 
           let no_symptom = Math.round((currentData["confirmed"] / 82.1) * 17.9);
 
@@ -61,6 +62,7 @@ var coronaService = {
             recovered: currentData["recovered"],
             deaths: currentData["deaths"],
             new_confirmed: new_confirmed,
+            new_deaths: new_deaths,
             no_symptom: no_symptom,
             create_time: currentData["date"]
           }

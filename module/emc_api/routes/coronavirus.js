@@ -9,8 +9,8 @@ router.route('/')
   // 取得所有資源
   .get(function(req, res) {
     coronavirus.items(req, function(err, results, fields) {
-      const startDate = "2020-01-31";
-      const endDate = "2020-06-30";
+      const startDate = "2020-02-03";
+      const endDate = "2020-10-31";
       let startTime = new Date(startDate);
       let endTime = new Date(endDate);
       let processedData = {};
