@@ -91,10 +91,10 @@ export function CoronaMap(props) {
                 seriesIndex: n,
                 realtime: true,
                 inRange: {
-                    color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [6, 60]
+                    color: ['lightskyblue', 'yellow', 'orangered'], symbolSize: [5, 30]
                 },
                 outOfRange: {       // 选中范围外的视觉配置
-                    symbolSize: [30, 100]
+                    symbolSize: [15, 50]
                 },
                 textStyle: {
                     color: '#fff'
@@ -202,8 +202,8 @@ export function CoronaMap(props) {
                         {
                             type: 'scatter',
                             coordinateSystem: 'geo',
-                            name: '2020-01-31',
-                            data: data['2020-1-31'].map((itemOpt) => {
+                            name: '2020-02-03',
+                            data: data['2020-2-3'].map((itemOpt) => {
                                 if (latlong[itemOpt.name] !== undefined) {
                                     return {
                                         name: latlong[itemOpt.name].name_cn,
@@ -239,6 +239,9 @@ export function CoronaMap(props) {
                 <ToggleButton value="new_confirmed" aria-label="centered">
                     新增病例
                     </ToggleButton>
+                <ToggleButton value="new_deaths" aria-label="centered">
+                新增死亡
+                </ToggleButton>    
                 <ToggleButton value="confirmed" aria-label="centered">
                     確診
                     </ToggleButton>

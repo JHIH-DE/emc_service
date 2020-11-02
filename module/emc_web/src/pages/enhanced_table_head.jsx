@@ -15,11 +15,12 @@ EnhancedTableHead.propTypes = {
 
   const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: '國家/地區' },
-    { id: 'new_confirmed', numeric: false, disablePadding: false, label: '新增病例' },
-    { id: 'confirmed', numeric: false, disablePadding: false, label: '已確診' },
-    { id: 'no_symptom', numeric: false, disablePadding: false, label: '無症狀人數' },
-    { id: 'recovered', numeric: false, disablePadding: false, label: '恢復人數' },
-    { id: 'deaths', numeric: false, disablePadding: false, label: '死亡人數' }
+    { id: 'new_confirmed', numeric: false, disablePadding: false, label: '新增確診' },
+    { id: 'new_deaths', numeric: false, disablePadding: false, label: '新增死亡' },
+    { id: 'confirmed', numeric: false, disablePadding: false, label: '確診' },
+    { id: 'no_symptom', numeric: false, disablePadding: false, label: '無症狀' },
+    { id: 'recovered', numeric: false, disablePadding: false, label: '恢復' },
+    { id: 'deaths', numeric: false, disablePadding: false, label: '死亡' }
   ];
 
 export default function EnhancedTableHead(props) {

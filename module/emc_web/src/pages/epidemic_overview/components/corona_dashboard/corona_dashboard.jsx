@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import { useSelector } from "react-redux";
 import { CoronaRanking } from "../corona_ranking/corona_ranking";
 import { CoronaMap } from "../corona_map/corona_map";
+import { CoronaMapTop } from "../corona_map/corona_map_top";
 import Paper from '@material-ui/core/Paper';
 import NumberFormat from 'react-number-format';
 // import mask from '../../../../../dist/assets/mask.png';
@@ -21,7 +22,7 @@ export default function CoronaDashboard(props) {
     });
     const coronavirus = useSelector(state => state.coronavirus);
     const worldData = useSelector(state => state.worldData);
-    
+
     return (
         <div>
             {coronavirus.isLoading ? <div className="progress-content"> <CircularProgress /></div> :
@@ -70,7 +71,7 @@ export default function CoronaDashboard(props) {
                             {worldData.latestData.length === 0 ? <div className="progress-content"> <CircularProgress /></div> : <CoronaRanking style={{ height: "50%" }} data={worldData.latestData} latlong={latlong} />}
                         </Grid>
                         <Grid item xs={6}>
-                            <CoronaMap data={coronavirus.data} dates={coronavirus.dates} latlong={latlong}/>
+                            <CoronaMap data={coronavirus.data} dates={coronavirus.dates} latlong={latlong} />
                         </Grid>
                     </Grid>
                 </div>

@@ -28,7 +28,7 @@ export function CoronaRanking(props) {
 
             let taiwan = data.filter(item => item.name === "Taiwan*")[0];
             let ranking = temp.sort((a, b) => {
-                return b['confirmed'] - a['confirmed'];
+                return b['new_confirmed'] - a['new_confirmed'];
             });
             let rankingData = ranking.slice(0, 20);
             rankingData.push(taiwan);
@@ -93,6 +93,7 @@ export function CoronaRanking(props) {
                                     {row.name_cn}
                                 </TableCell>
                                 <TableCell align="left">{row.new_confirmed}</TableCell>
+                                <TableCell align="left">{row.new_deaths}</TableCell>
                                 <TableCell align="left">{row.confirmed}</TableCell>
                                 <TableCell align="left">{row.no_symptom}</TableCell>
                                 <TableCell align="left">{row.recovered}</TableCell>
